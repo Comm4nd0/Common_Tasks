@@ -20,7 +20,7 @@ def print_ascii():
           \_____\___/|_| |_| |_|_| |_| |_|\___/|_| |_|    |_|\__,_|___/_|\_\___/ 
     """)
 
-def print_menu(status):
+def print_menu(info):
     print_ascii()
     print("""
                                                                          
@@ -28,8 +28,8 @@ def print_menu(status):
     [1] - Start PyCharm
     [99]- Exit
     """)
-    if status:
-        print('Info: {}\n'.format(status))
+    if info:
+        print('Info: {}\n'.format(info))
 
 def ansible_installed():
     global pswd
@@ -86,35 +86,37 @@ def restart_nm():
     child.sendline(pswd)
     child.interact()
 
+    return 'network-manager restarted'
+
 def pycharm():
     file_path = '{}/software/pycharm-community-2017.3.3/bin/pycharm.sh'.format(os.getcwd())
     subprocess.Popen(['bash', file_path, '&'])
 
-def main():
-    status = ''
+    return 'PyCharm started'
+
+def main(info):
     while True:
         os.system('clear')
-        print_menu(status)
+        print_menu(info)
         try:
             option = input("Selection: ")
-
             try:
                 option = int(option)
                 return option
-
             except ValueError:
-                status = "Not a valid option"
+                info = "Not a valid option"
         except KeyboardInterrupt:
-            status = "Hit '99' to exit, my friend."
+            info = "Hit '99' to exit, my friend."
 
 if __name__ == '__main__':
     os.system('clear')
     ansible_installed()
+    info = ''
     while True:
-       option = main()
+       option = main(info)
        if option == 99:
            sys.exit()
        elif option == 0:
-           restart_nm()
+           info = restart_nm()
        elif option == 1:
-           pycharm()
+           info = pycharm()
