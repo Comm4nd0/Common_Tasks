@@ -31,48 +31,6 @@ def print_menu(info):
     if info:
         print('Info: {}\n'.format(info))
 
-def ansible_installed():
-    global pswd
-    yes_ans = ['Y', 'y', '']
-    if not shutil.which('ansible'):
-        print_ascii()
-        print('You must install Ansible for this tool to work!\n')
-        print('Would you like to install it now?')
-        while True:
-            try:
-                ans = input('[Y/n] ')
-                if ans in yes_ans:
-                    os.system('clear')
-                    print_ascii()
-                    print('Installing Ansible')
-                    pswd = getpass.getpass('sudo password:')
-                    child = pexpect.spawn('sudo apt install ansible')
-                    child.expect(':')
-                    child.sendline(pswd)
-                    child.expect(']')
-                    child.sendline('Y')
-                    child.interact()
-                    break
-                elif ans == 'n':
-                    print('\nPlease install Ansible and restart the Common Tasks program!')
-                    sys.exit()
-                else:
-                    print("Not a valid input, please enter (Y)es or (n)o.")
-            except KeyboardInterrupt:
-                print("""
-Oh i see how it is! Goodbye!! 
-     .-',',''-.
-   .'          '.
-  /   O      O   |
- :           `    :
- |                |   
- :    .------.    :
-  \  '        '  /
-   '.          .'
-     '-......-'
-""")
-                sys.exit()
-
 def restart_nm():
     global pswd
     if not pswd:
@@ -110,7 +68,6 @@ def main(info):
 
 if __name__ == '__main__':
     os.system('clear')
-    ansible_installed()
     info = ''
     while True:
        option = main(info)
